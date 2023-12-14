@@ -1,0 +1,7 @@
+- Fibonacci Assembly
+- Como rodar o projeto:
+- Tenha instalado o wsl2 no windows (caso seja windows)
+- Tenha instalado o Make
+- Tenha instalado o NASM (no linux é: sudo apt-get install nasm)
+- Para rodar o projeto, basta executar o comando `make` no terminal (na pasta que esta o makefile)
+- Depois rode ./fib para executar o programa.
