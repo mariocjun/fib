@@ -1,3 +1,35 @@
+; ------------------------------------------
+; Lista de palavras-chave e registradores em Assembly
+; ------------------------------------------
+
+; PALAVRAS-CHAVE
+; --------------
+
+; mov: Usada para mover dados entre registradores, da memória para um registrador ou de um registrador para a memória
+; inc: Incrementa o valor de um registrador ou local de memória
+; dec: Decrementa o valor de um registrador ou local de memória
+; cmp: Compara dois valores
+; jne: Salta para um label se o último "cmp" não for igual (jump not equal)
+; jmp: Salta incondicionalmente para um label (jump)
+; ret: Retorna de uma chamada de função
+; syscall: Realiza uma chamada ao sistema
+
+; REGISTRADORES
+; -------------
+
+; rax: Geralmente usado para armazenar o valor de retorno de uma função
+; rcx: Comumente usado como um contador em loops
+; rdi: Usado para passar o primeiro argumento a uma função
+; rsi: Usado para passar o segundo argumento a uma função
+; rdx: Usado para passar o terceiro argumento a uma função
+; r8 - r15: Outros registradores gerais disponíveis para armazenar dados
+
+; NOTA
+; ----
+; SYS_WRITE, SYS_EXIT, STDOUT, SUCCESS, FAILURE são normalmente definidos como constantes em algum lugar no código ou nas bibliotecas incluídas
+
+; ------------------------------------------
+
 ;--------------------------------------------;
 ;             DADOS INICIALIZADOS            ;
 ;--------------------------------------------;
@@ -18,26 +50,47 @@ section .data			; Declara as macros e os dados inicializados
 	NEW_LINE equ 10	    ; Quebra a linha -> ASCII -> '\n'
 	EMPTY equ 0         ; Caractere vazio -> ASCII -> NULL
 
-;--------------------------------------------;
-;                   STRINGS                  ;
-;--------------------------------------------;
+;------------------------------------------------;
+;                   STRINGS                     ;
+;------------------------------------------------;
 
+    ; Declara uma variável de nome 'pergunta1' como uma sequência de bytes.
+    ; Essa variável armazena a string "Digite um inteiro positivo: ".
     pergunta1 db "Digite um inteiro positivo: "
-	tamPergunta1 equ $-pergunta1 	; Tamanho da string pergunta2 -> 28
 
+    ; Calcula o tamanho da string 'pergunta1'.
+    ; O símbolo "$" representa a posição atual do contador de localização no montador.
+    ; Uma subtração entre a posição atual e a posição onde 'pergunta1' começou resulta no comprimento da string.
+	tamPergunta1 equ $-pergunta1
+
+	; Outra variável de sequência de bytes é declarada, chamada 'pergunta2'.
+	; Essa variável armazena a string "Imprimir os zeros antes dos termos? (1 - sim, 0 - nao): ".
 	pergunta2 db "Imprimir os zeros antes dos termos? (1 - sim, 0 - nao): "
-	tamPergunta2 equ $-pergunta2	; Tamanho da string pergunta1 -> 56
 
+    ; De forma semelhante ao 'tamPergunta1', calculamos o tamanho da string 'pergunta2'.
+	tamPergunta2 equ $-pergunta2
+
+    ; 'lineP1' é uma variável que armazena a string "Numero " quando declarada como uma sequência de bytes.
 	lineP1 db "Numero "
-	tamLineP1 equ $-lineP1     		; Tamanho da string lineP1 -> 7
 
+    ; Aqui, calculamos o tamanho da string 'lineP1'.
+	tamLineP1 equ $-lineP1
+
+    ; 'lineP2' é outra variável de sequência de bytes, que armazena a string " -> ".
 	lineP2 db " -> "
-	tamLineP2 equ $-lineP2			; Tamanho da string lineP2 -> 4
 
+    ; O tamanho da string 'lineP2' é calculado aqui.
+	tamLineP2 equ $-lineP2
+
+    ; 'lineP3' é uma variável que contém um caractere de nova linha (NEW_LINE).
 	lineP3 db NEW_LINE
-	tamLineP3 equ $-lineP3     		; Tamanho da string lineP3 -> 1
 
-	zeros db "0000000000000000000"	;64-bit -> 20 digitos -> 19 zeros
+    ; O tamanho da string 'lineP3' (que é de 1 byte, o caractere de nova linha) é calculado aqui.
+	tamLineP3 equ $-lineP3
+
+    ; Aqui, declaramos uma variável chamada 'zeros' que armazena uma string de 19 zeros.
+    ; Esta variável pode ser usada para preencher strings com zeros à esquerda, garantindo que elas possuam 20 dígitos (contando com o algarismo mais significativo que não seja zero).
+	zeros db "0000000000000000000"
 
 ;--------------------------------------------;
 ;              VALORES NUMÉRICOS             ;
@@ -104,14 +157,14 @@ _start:
 
 _perguntas:					; Imprime as perguntas e pega os inputs do usuário
 	;Imprime a primeira pergunta
-    mov rax, SYS_WRITE	  
-    mov rdi, STDOUT       
+    mov rax, SYS_WRITE
+    mov rdi, STDOUT
     mov rsi, pergunta1     	; Move a mensagem que deve ser escrita
     mov rdx, tamPergunta1	; Tamanho da mensagem a ser escrita
     syscall
 
 	; Lê uma string do teclado
-    mov rax, SYS_READ     	; Registra que queremos ler
+    mov rax, SYS_READ     	; Atribuindo o valor da constante SYS_READ para o registrador rax
     mov rdi, STDIN        	; Registra que a leitura deve ser do teclado
     mov rsi, numero       	; Move a leitura para a variavel numero
     mov rdx, tamNumero   	; Define o tamanho do input, definido nas constantes
